@@ -1,1 +1,1 @@
-# Cybersecurity-portal-of-the-Moscow-Polytechnic-University
+# Cybersport-portal-of-the-Moscow-Polytechnic-University
