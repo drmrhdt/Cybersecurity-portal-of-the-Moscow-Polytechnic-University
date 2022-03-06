@@ -12,6 +12,7 @@ package-lock.json
 /.idea
 /frontend/.idea
 /backend/.idea
+/admin/.idea
 .project
 .classpath
 .c9/
@@ -25,3 +26,7 @@ package-lock.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+/admin/node_modules
+/admin/.vscode
+/admin/.angular
