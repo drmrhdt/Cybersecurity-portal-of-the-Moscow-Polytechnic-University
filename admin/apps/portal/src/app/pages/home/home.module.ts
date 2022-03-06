@@ -58,4 +58,4 @@ import { HomeEffects } from './store/home.effects';
   declarations: [HomeComponent],
   exports: [HomeComponent],
 })
-export class SearchPartnersModule {}
+export class HomeModule {}
