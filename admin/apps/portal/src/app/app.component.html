@@ -65,8 +65,14 @@
                 nzIcon="eye">
                 <ul>
                     <li nz-menu-item
-                        nzMatchRouter>
+                        nzMatchRouter
+                        [routerLink]="['applications', 'main-team']">
                         <a>В сборную</a>
+                    </li>
+                    <li nz-menu-item
+                        nzMatchRouter
+                        [routerLink]="['applications', 'team']">
+                        <a>В команду</a>
                     </li>
                 </ul>
             </li>

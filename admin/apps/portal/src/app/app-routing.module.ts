@@ -20,6 +20,20 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/news/news.module').then((m) => m.NewsModule),
   },
+  {
+    path: 'applications/main-team',
+    loadChildren: () =>
+      import('./pages/application-main-team/application-main-team.module').then(
+        (m) => m.ApplicationMainTeamModule
+      ),
+  },
+  {
+    path: 'applications/team',
+    loadChildren: () =>
+      import('./pages/application-team/application-team.module').then(
+        (m) => m.ApplicationTeamModule
+      ),
+  },
 ];
 
 @NgModule({
