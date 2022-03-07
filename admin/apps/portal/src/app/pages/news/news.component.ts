@@ -40,8 +40,8 @@ export class NewsComponent implements OnInit {
     },
     {
       id: 2,
-      title: 'title',
-      description: 'description',
+      title: 'title2',
+      description: 'description2',
       images: [
         'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
       ],
@@ -68,7 +68,9 @@ export class NewsComponent implements OnInit {
     this.previewVisible = true;
   };
 
-  showModal(): void {
+  showModal(news?: any): void {
+    this.selectedNews = news;
+    this.newsForm.patchValue(this.selectedNews);
     this.isVisible = true;
   }
 
@@ -81,6 +83,21 @@ export class NewsComponent implements OnInit {
     this.isVisible = false;
     this.mockNews.push({ ...this.newsForm.value, id: Math.random() });
     this.newsForm.reset();
+  }
+
+  editNews() {
+    this.isLoading = true;
+    setTimeout(() => {
+      const newsToDeleteIndex = this.mockNews.findIndex(
+        (n) => this.selectedNews.id === n.id
+      );
+      this.mockNews.splice(newsToDeleteIndex, 1);
+      this.isVisible = false;
+      console.log(this.newsForm.value);
+      this.mockNews.push({ ...this.newsForm.value, id: Math.random() });
+      this.newsForm.reset();
+      this.isVisible = false;
+    }, 300);
   }
 
   confirmDelete() {
@@ -97,5 +114,6 @@ export class NewsComponent implements OnInit {
   handleCancel(): void {
     this.isDeleteModalVisible = false;
     this.isVisible = false;
+    this.newsForm.reset();
   }
 }

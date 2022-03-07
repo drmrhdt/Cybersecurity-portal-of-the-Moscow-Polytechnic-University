@@ -22,7 +22,7 @@
                         nzShape="circle">
                     <i nz-icon
                        nzType="edit"
-                       (click)="showModal()"></i>
+                       (click)="showModal(news)"></i>
                 </button>
                 <button nz-button
                         nzType="default"
@@ -47,12 +47,12 @@
 </section>
 
 <nz-modal [(nzVisible)]="isVisible"
-          nzTitle="Создание новости"
+          [nzTitle]="selectedNews?.id ? 'Редактирование новости' : 'Создание новости'"
           (nzOnCancel)="handleCancel()"
-          (nzOnOk)="createNews()"
+          (nzOnOk)="selectedNews?.id ? editNews() : createNews()"
           [nzOkDisabled]="newsForm.invalid"
           nzCancelText="Отмена"
-          nzOkText="Создать">
+          nzOkText="Сохранить">
     <ng-container *nzModalContent>
         <form nz-form
               [formGroup]="newsForm"
@@ -114,6 +114,6 @@
           nzCancelText="Нет"
           nzOkText="Да">
     <ng-container *nzModalContent>
-        Вы действительно хотите удалить новость {{selectedNews.title}}
+        Вы действительно хотите удалить новость {{selectedNews.title}}?
     </ng-container>
 </nz-modal>
