@@ -15,6 +15,11 @@ const routes: Routes = [
         (m) => m.InDevelopmentModule
       ),
   },
+  {
+    path: 'news',
+    loadChildren: () =>
+      import('./pages/news/news.module').then((m) => m.NewsModule),
+  },
 ];
 
 @NgModule({
