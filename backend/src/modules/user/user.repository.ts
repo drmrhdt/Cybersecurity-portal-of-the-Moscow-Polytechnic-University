@@ -62,7 +62,7 @@ export class UsersRepository {
   public async update(
     id: number,
     dto: UpdateUserDto,
-  ): Promise<[number, User[]]> {
+  ): Promise<[affectedCount: number]> {
     return this.users.update(dto, { where: { _id: id } });
   }
 }
