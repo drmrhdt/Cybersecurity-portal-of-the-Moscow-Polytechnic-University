@@ -27,7 +27,6 @@ import { News } from './modules/news/entities/news.entity';
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
-    
   ],
   imports: [
     ConfigModule.forRoot({
@@ -51,7 +50,7 @@ import { News } from './modules/news/entities/news.entity';
     RoleModule,
     AuthModule,
     FilesModule,
-    NewsModule
+    NewsModule,
     // EmailModule,
   ],
 })

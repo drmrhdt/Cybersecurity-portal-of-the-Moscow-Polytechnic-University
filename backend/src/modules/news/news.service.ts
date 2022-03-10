@@ -7,7 +7,7 @@ import { NewsRepository } from './news.repository';
 
 @Injectable()
 export class NewsService {
-constructor(private readonly newsRepository: NewsRepository){}
+  constructor(private readonly newsRepository: NewsRepository) {}
 
   create(createNewsDto: CreateNewsDto) {
     return createNewsDto;
