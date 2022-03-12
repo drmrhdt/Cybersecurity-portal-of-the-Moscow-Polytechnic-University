@@ -17,6 +17,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { RefreshToken } from './modules/auth/models/refresh-token.model';
 import { FilesModule } from './modules/files/files.module';
+import { NewsModule } from './modules/news/news.module';
+import { News } from './modules/news/entities/news.entity';
 
 @Module({
   controllers: [],
@@ -40,7 +42,7 @@ import { FilesModule } from './modules/files/files.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, UserRoles, RefreshToken],
+      models: [User, Role, UserRoles, RefreshToken, News],
       autoLoadModels: process.env.NODE_ENV === 'development',
       retryAttempts: 3,
     }),
@@ -48,6 +50,7 @@ import { FilesModule } from './modules/files/files.module';
     RoleModule,
     AuthModule,
     FilesModule,
+    NewsModule,
     // EmailModule,
   ],
 })

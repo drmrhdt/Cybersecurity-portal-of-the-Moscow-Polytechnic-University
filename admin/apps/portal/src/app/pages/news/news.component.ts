@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NewsService } from './news.service';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
   new Promise((resolve, reject) => {
@@ -28,6 +29,7 @@ export class NewsComponent implements OnInit {
   selectedNews: any;
   isLoading = false;
 
+  newsList: any = []
   mockNews = [
     {
       id: 1,
@@ -48,7 +50,7 @@ export class NewsComponent implements OnInit {
     },
   ];
 
-  constructor(private _formBuilder: FormBuilder) {
+  constructor(private _formBuilder: FormBuilder, private _newsService: NewsService) {
     this.newsForm = this._formBuilder.group({
       title: ['', Validators.required],
       description: '',
@@ -57,6 +59,11 @@ export class NewsComponent implements OnInit {
 
   ngOnInit() {
     //  здесь будем доставать новости из store
+    this.getNewsList()
+  }
+
+  getNewsList() {
+    this._newsService.getAllNews().subscribe(news => this.newsList = news)
   }
 
   // NzUploadFile
@@ -82,7 +89,12 @@ export class NewsComponent implements OnInit {
   createNews() {
     this.isVisible = false;
     this.mockNews.push({ ...this.newsForm.value, id: Math.random() });
-    this.newsForm.reset();
+    console.log(this.fileList[0].thumbUrl)
+    // this._newsService.createNews(this.newsForm.value).subscribe(() => {
+    //   this.newsForm.reset();
+    //   this.getNewsList()
+    // })
+    this._newsService.createImage(this.fileList[0].thumbUrl).subscribe()
   }
 
   editNews() {
@@ -93,8 +105,7 @@ export class NewsComponent implements OnInit {
       );
       this.mockNews.splice(newsToDeleteIndex, 1);
       this.isVisible = false;
-      console.log(this.newsForm.value);
-      this.mockNews.push({ ...this.newsForm.value, id: Math.random() });
+      console.log(this.newsForm.value, this.fileList);
       this.newsForm.reset();
       this.isVisible = false;
     }, 300);
