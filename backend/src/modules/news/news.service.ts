@@ -10,7 +10,7 @@ export class NewsService {
   constructor(private readonly newsRepository: NewsRepository) {}
 
   create(createNewsDto: CreateNewsDto) {
-    return createNewsDto;
+    return this.newsRepository.create(createNewsDto);
   }
 
   findAll() {
@@ -18,14 +18,14 @@ export class NewsService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} news`;
+    return this.newsRepository.findById(id);
   }
 
   update(id: number, updateNewsDto: UpdateNewsDto) {
-    return `This action updates a #${id} news`;
+    return this.newsRepository.update(id, updateNewsDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} news`;
+    return this.newsRepository.deleteById(id);
   }
 }

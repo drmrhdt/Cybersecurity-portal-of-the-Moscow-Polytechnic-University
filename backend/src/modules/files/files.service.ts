@@ -37,7 +37,8 @@ export class FilesService {
   }
 
   async createPhoto(file): Promise<string> {
-    return await this.createFile(file, 'jpg', 'photos');
+    console.log(file)
+    return await this.createFile(file, 'png', 'photos');
   }
 
   async deletePhoto(fileName: string): Promise<void> {
