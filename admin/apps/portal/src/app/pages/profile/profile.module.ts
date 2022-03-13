@@ -10,6 +10,7 @@ import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile-routing.module';
 import * as fromState from './store/reducers';
 import { ProfileEffects } from './store/profile.effects';
+import { InDevelopmentModule } from '../../in-development/in-development.module';
 
 @NgModule({
   declarations: [ProfileComponent],
@@ -22,6 +23,7 @@ import { ProfileEffects } from './store/profile.effects';
       fromState.profileReducer
     ),
     EffectsModule.forFeature([ProfileEffects]),
+    InDevelopmentModule
   ],
   exports: [ProfileComponent],
 })

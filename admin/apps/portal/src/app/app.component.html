@@ -27,15 +27,18 @@
                         <a>Новости</a>
                     </li>
                     <li nz-menu-item
-                        nzMatchRouter>
-                        <a>Расписания</a>
+                        nzMatchRouter
+                        [routerLink]="['events']">
+                        <a>События</a>
                     </li>
                     <li nz-menu-item
-                        nzMatchRouter>
+                        nzMatchRouter
+                        [routerLink]="['games']">
                         <a>Дисциплины (игры)</a>
                     </li>
                     <li nz-menu-item
-                        nzMatchRouter>
+                        nzMatchRouter
+                        [routerLink]="['contacts']">
                         <a>К кому обратиться</a>
                     </li>
                 </ul>

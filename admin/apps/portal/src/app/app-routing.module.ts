@@ -11,8 +11,8 @@ const routes: Routes = [
   {
     path: 'profile',
     loadChildren: () =>
-      import('./in-development/in-development.module').then(
-        (m) => m.InDevelopmentModule
+      import('./pages/profile/profile.module').then(
+        (m) => m.ProfileModule
       ),
   },
   {
@@ -32,6 +32,27 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/application-team/application-team.module').then(
         (m) => m.ApplicationTeamModule
+      ),
+  },
+  {
+    path: 'games',
+    loadChildren: () =>
+      import('./pages/games/games.module').then(
+        (m) => m.GamesModule
+      ),
+  },
+  {
+    path: 'events',
+    loadChildren: () =>
+      import('./pages/events/events.module').then(
+        (m) => m.EventsModule
+      ),
+  },
+  {
+    path: 'contacts',
+    loadChildren: () =>
+      import('./pages/contacts/contacts.module').then(
+        (m) => m.ContactsModule
       ),
   },
 ];
