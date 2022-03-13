@@ -30,7 +30,7 @@ export class NewsService {
   updateNewsById(id: any, data: any): Observable<any> {
     const API_URL = `${this.apiUrl}/${id}`;
     return this.http
-      .put(API_URL, data, { headers: this.headers })
+      .patch(API_URL, data, { headers: this.headers })
       .pipe(catchError(this.handleError));
   }
 
@@ -50,6 +50,11 @@ export class NewsService {
       );
     }
     return throwError('Something bad happened; please try again later.');
+  }
+
+  saveImage(data: any): Observable<any> {
+    const API_URL = `http://localhost:5000/api/v1/files`;
+    return this.http.post(API_URL, data, {});
   }
 
   saveImages(data: any): Observable<any> {

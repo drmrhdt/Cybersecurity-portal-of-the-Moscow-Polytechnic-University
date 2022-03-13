@@ -1,5 +1,5 @@
 export class CreateNewsDto {
     title: string
     description: string
-    // files: []
+    main_image_url: string
 }
