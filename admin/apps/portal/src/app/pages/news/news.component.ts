@@ -127,11 +127,19 @@ export class NewsComponent implements OnInit {
 
   confirmDelete() {
     this.isLoading = true;
-    this._newsService.deleteNewsById(this.selectedNews._id).subscribe((_) => {
-      this.getNewsList();
-      this.isLoading = false;
-      this.isDeleteModalVisible = false;
-    });
+    this._newsService
+      .deleteNewsById(this.selectedNews._id)
+      .pipe(
+        switchMap(() => {
+          this.isLoading = false;
+          this.isDeleteModalVisible = false;
+          this.getNewsList();
+          return this._newsService.deleteImageByName(
+            this.selectedNews.main_image_url
+          );
+        })
+      )
+      .subscribe();
   }
 
   handleCancel(): void {

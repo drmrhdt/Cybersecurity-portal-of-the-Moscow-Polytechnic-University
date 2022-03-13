@@ -1,5 +1,7 @@
 import {
+  Body,
   Controller,
+  Delete,
   Post,
   UploadedFile,
   UploadedFiles,
@@ -11,6 +13,7 @@ import { diskStorage } from 'multer';
 import { Public } from '../auth/decorators/public-url.decorator';
 
 import { extname } from 'path';
+import { FilesService } from './files.service';
 
 export const imageFileFilter = (req, file, callback) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -34,7 +37,7 @@ const DESTINATION = './dist/static/photos';
 @ApiTags('Файлы')
 @Controller('files')
 export class FilesController {
-  constructor() {}
+  constructor(private _filesService: FilesService) {}
 
   @ApiOperation({ summary: 'Сохранение одного файла' })
   @Public()
@@ -76,5 +79,12 @@ export class FilesController {
       response.push(fileReponse);
     });
     return response;
+  }
+
+  @ApiOperation({ summary: 'Удаление фото' })
+  @Public()
+  @Delete()
+  async deleteFileByNameAndFolder(@Body() dto: any) {
+    this._filesService.deleteFile(dto.fileName, 'photos')
   }
 }
