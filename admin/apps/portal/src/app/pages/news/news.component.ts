@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { switchMap } from 'rxjs';
 import { NewsService } from './news.service';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
@@ -29,7 +30,7 @@ export class NewsComponent implements OnInit {
   selectedNews: any;
   isLoading = false;
 
-  newsList: any = []
+  newsList: any = [];
   mockNews = [
     {
       id: 1,
@@ -50,7 +51,10 @@ export class NewsComponent implements OnInit {
     },
   ];
 
-  constructor(private _formBuilder: FormBuilder, private _newsService: NewsService) {
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _newsService: NewsService
+  ) {
     this.newsForm = this._formBuilder.group({
       title: ['', Validators.required],
       description: '',
@@ -59,14 +63,13 @@ export class NewsComponent implements OnInit {
 
   ngOnInit() {
     //  здесь будем доставать новости из store
-    this.getNewsList()
+    this.getNewsList();
   }
 
   getNewsList() {
-    this._newsService.getAllNews().subscribe(news => this.newsList = news)
+    this._newsService.getAllNews().subscribe((news) => (this.newsList = news));
   }
 
-  // NzUploadFile
   handlePreview = async (file: any): Promise<void> => {
     if (!file.url && !file['preview']) {
       file['preview'] = await getBase64(file.originFileObj);
@@ -88,13 +91,26 @@ export class NewsComponent implements OnInit {
 
   createNews() {
     this.isVisible = false;
-    this.mockNews.push({ ...this.newsForm.value, id: Math.random() });
-    console.log(this.fileList[0].thumbUrl)
-    // this._newsService.createNews(this.newsForm.value).subscribe(() => {
-    //   this.newsForm.reset();
-    //   this.getNewsList()
-    // })
-    this._newsService.createImage(this.fileList[0].thumbUrl).subscribe()
+    const formData = new FormData();
+    this.fileList.forEach((file: any) => {
+      formData.append('file', file);
+    });
+    this._newsService
+      .saveImages(formData)
+      .pipe(
+        switchMap((images) => {
+          return this._newsService.createNews({
+            ...this.newsForm.value,
+            // images,
+            main_image_url: images[0],
+          });
+        })
+      )
+      .subscribe((_) => {
+        this.newsForm.reset();
+        this.getNewsList();
+        this.fileList = [];
+      });
   }
 
   editNews() {
@@ -105,21 +121,17 @@ export class NewsComponent implements OnInit {
       );
       this.mockNews.splice(newsToDeleteIndex, 1);
       this.isVisible = false;
-      console.log(this.newsForm.value, this.fileList);
       this.newsForm.reset();
-      this.isVisible = false;
     }, 300);
   }
 
   confirmDelete() {
     this.isLoading = true;
-    setTimeout(() => {
-      const newsToDeleteIndex = this.mockNews.findIndex(
-        (n) => this.selectedNews.id === n.id
-      );
-      this.mockNews.splice(newsToDeleteIndex, 1);
+    this._newsService.deleteNewsById(this.selectedNews._id).subscribe((_) => {
+      this.getNewsList();
+      this.isLoading = false;
       this.isDeleteModalVisible = false;
-    }, 300);
+    });
   }
 
   handleCancel(): void {
@@ -127,4 +139,9 @@ export class NewsComponent implements OnInit {
     this.isVisible = false;
     this.newsForm.reset();
   }
+
+  beforeUpload = (file: NzUploadFile): boolean => {
+    this.fileList = this.fileList.concat(file);
+    return false;
+  };
 }
