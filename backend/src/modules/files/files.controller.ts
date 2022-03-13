@@ -53,7 +53,7 @@ export class FilesController {
     }),
   )
   async uploadedFile(@UploadedFile() file: Express.Multer.File) {
-    const response = '/dist/static/photos/' + file?.fieldname;
+    const response = {path: '/photos/' + file?.filename};
     return response;
   }
 

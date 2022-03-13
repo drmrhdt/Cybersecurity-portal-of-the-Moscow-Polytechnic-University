@@ -1,8 +1,8 @@
 <h1>Новости</h1>
 <h2>
   Список новостей
-  <button nz-button nzType="primary">
-    <i nz-icon nzType="plus" (click)="showModal()"> </i>
+  <button nz-button nzType="primary" (click)="showEditModal()">
+    <i nz-icon nzType="plus"></i>
   </button>
 </h2>
 <section class="news__articles-container">
@@ -16,7 +16,7 @@
           nz-button
           nzType="default"
           nzShape="circle"
-          (click)="showModal(news)"
+          (click)="showEditModal(news)"
         >
           <i nz-icon nzType="edit"></i>
         </button>
@@ -26,7 +26,7 @@
           nzShape="circle"
           (click)="showDeleteConfirmationModal(news)"
         >
-          <i nz-icon nzType="delete"> </i>
+          <i nz-icon nzType="delete"></i>
         </button>
       </div>
     </h3>
@@ -55,10 +55,10 @@
 </section>
 
 <nz-modal
-  [(nzVisible)]="isVisible"
-  [nzTitle]="selectedNews?.id ? 'Редактирование новости' : 'Создание новости'"
+  [(nzVisible)]="isEditVisible"
+  [nzTitle]="selectedNews?._id ? 'Редактирование новости' : 'Создание новости'"
   (nzOnCancel)="handleCancel()"
-  (nzOnOk)="selectedNews?.id ? editNews() : createNews()"
+  (nzOnOk)="selectedNews?._id ? editNews() : createNews()"
   [nzOkDisabled]="newsForm.invalid"
   nzCancelText="Отмена"
   nzOkText="Сохранить"
@@ -88,21 +88,27 @@
         >
         </textarea>
       </nz-textarea-count>
-
-      <div class="clearfix">
-        Фото новости
+      <div
+        *ngIf="
+          !selectedNews?._id ||
+            !selectedNews?.main_image_url ||
+            isMarkMainImageForDelete;
+          else editImage
+        "
+        class="clearfix"
+      >
+        Заглавное фото новости
         <nz-upload
           nzListType="picture-card"
           [(nzFileList)]="fileList"
           [nzShowButton]="fileList.length < 1"
           [nzPreview]="handlePreview"
           [nzBeforeUpload]="beforeUpload"
+          [nzAccept]="'image/png, image/jpeg'"
         >
-          <!-- [nzAccept]  -->
-          <!-- [nzMultiple]="true" -->
           <div>
             <i nz-icon nzType="plus"></i>
-            <div style="margin-top: 8px">Upload</div>
+            <div class="news__btn--upload">Выбрать</div>
           </div>
         </nz-upload>
         <nz-modal
@@ -116,6 +122,27 @@
           </ng-template>
         </nz-modal>
       </div>
+      <ng-template #editImage>
+        <span>Заглавное фото:</span>
+        <div nz-space nzAlign="center">
+          <img
+            [nzSrc]="'http://localhost:5000' + selectedNews.main_image_url"
+            nz-image
+            width="100px"
+            height="100px"
+            class="news__article-image"
+            alt="main news image"
+          />
+          <button
+            nz-button
+            nzType="default"
+            nzShape="circle"
+            (click)="checkIsMarkMainImageForDelete($event)"
+          >
+            <i nz-icon nzType="delete"></i>
+          </button>
+        </div>
+      </ng-template>
     </form>
   </ng-container>
 </nz-modal>
