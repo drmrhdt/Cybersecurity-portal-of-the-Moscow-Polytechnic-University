@@ -19,6 +19,7 @@ import { RefreshToken } from './modules/auth/models/refresh-token.model';
 import { FilesModule } from './modules/files/files.module';
 import { NewsModule } from './modules/news/news.module';
 import { News } from './modules/news/entities/news.entity';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   controllers: [],
@@ -45,6 +46,10 @@ import { News } from './modules/news/entities/news.entity';
       models: [User, Role, UserRoles, RefreshToken, News],
       autoLoadModels: process.env.NODE_ENV === 'development',
       retryAttempts: 3,
+      sync: { force: false },
+    }),
+    MulterModule.register({
+      dest: './dist/static/photos',
     }),
     UserModule,
     RoleModule,

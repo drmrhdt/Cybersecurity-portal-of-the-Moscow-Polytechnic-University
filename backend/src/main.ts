@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
+import express, { json, urlencoded } from 'express';
+import { join } from 'path';
 
 async function bootstrap() {
   try {
@@ -9,6 +11,8 @@ async function bootstrap() {
 
     const app = await NestFactory.create(AppModule);
     app.enableCors({ credentials: true });
+    app.use(json({ limit: '50mb' }));
+    app.use(urlencoded({ extended: true, limit: '50mb' }));
     app.use(cookieParser());
 
     app.setGlobalPrefix('api/v1');

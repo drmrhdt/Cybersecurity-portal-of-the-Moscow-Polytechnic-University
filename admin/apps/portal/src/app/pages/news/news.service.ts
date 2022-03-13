@@ -55,10 +55,9 @@ export class NewsService {
       'Something bad happened; please try again later.');
   };
 
-  // create image
-  createImage(data: any): Observable<any> {
-    let API_URL = 'http://localhost:5000/api/v1/files';
-    return this.http.post(API_URL, { file: data }, { headers: new HttpHeaders().set('Content-Type', 'multipart/form-data') })
+  saveImages(data: any): Observable<any> {
+    let API_URL = 'http://localhost:5000/api/v1/files/multiple';
+    return this.http.post(API_URL, data, {})
       .pipe(
         catchError(this.handleError)
       )

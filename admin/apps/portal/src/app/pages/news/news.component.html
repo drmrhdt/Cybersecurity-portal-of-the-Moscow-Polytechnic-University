@@ -1,119 +1,135 @@
 <h1>Новости</h1>
 <h2>
-    Список новостей
-    <button nz-button
-            nzType="primary">
-        <i nz-icon
-           nzType="plus"
-           (click)="showModal()">
-        </i>
-    </button>
+  Список новостей
+  <button nz-button nzType="primary">
+    <i nz-icon nzType="plus" (click)="showModal()"> </i>
+  </button>
 </h2>
 <section class="news__articles-container">
-    <article *ngFor="let news of newsList"
-             class="wrapper news__article">
-        <h3 class="news__title">
-            <span>
-                {{news.title}}
-            </span>
-            <div>
-                <button nz-button
-                        nzType="default"
-                        nzShape="circle">
-                    <i nz-icon
-                       nzType="edit"
-                       (click)="showModal(news)"></i>
-                </button>
-                <button nz-button
-                        nzType="default"
-                        nzShape="circle">
-                    <i nz-icon
-                       nzType="delete"
-                       (click)="showDeleteConfirmationModal(news)"></i>
-                </button>
-            </div>
-        </h3>
-        <p>{{news.description}}</p>
-        <div class="news__article-image">
-            <img *ngFor="let url of news.images"
-                 [nzSrc]="url"
-                 nz-image
-                 width="100px"
-                 height="100px"
-                 class="news__article-image"
-                 alt="" />
-        </div>
-    </article>
+  <article *ngFor="let news of newsList" class="wrapper news__article">
+    <h3 class="news__title">
+      <span>
+        {{ news.title }}
+      </span>
+      <div>
+        <button
+          nz-button
+          nzType="default"
+          nzShape="circle"
+          (click)="showModal(news)"
+        >
+          <i nz-icon nzType="edit"></i>
+        </button>
+        <button
+          nz-button
+          nzType="default"
+          nzShape="circle"
+          (click)="showDeleteConfirmationModal(news)"
+        >
+          <i nz-icon nzType="delete"> </i>
+        </button>
+      </div>
+    </h3>
+    <p>{{ news.description }}</p>
+    <span>Заглавное фото:</span>
+    <img
+      [nzSrc]="'http://localhost:5000' + news.main_image_url"
+      nz-image
+      width="100px"
+      height="100px"
+      class="news__article-image"
+      alt="main news image"
+    />
+    <div class="news__article-image">
+      <img
+        *ngFor="let url of news.images"
+        [nzSrc]="url"
+        nz-image
+        width="100px"
+        height="100px"
+        class="news__article-image"
+        alt=""
+      />
+    </div>
+  </article>
 </section>
 
-<nz-modal [(nzVisible)]="isVisible"
-          [nzTitle]="selectedNews?.id ? 'Редактирование новости' : 'Создание новости'"
-          (nzOnCancel)="handleCancel()"
-          (nzOnOk)="selectedNews?.id ? editNews() : createNews()"
-          [nzOkDisabled]="newsForm.invalid"
-          nzCancelText="Отмена"
-          nzOkText="Сохранить">
-    <ng-container *nzModalContent>
-        <form nz-form
-              [formGroup]="newsForm"
-              (ngSubmit)="createNews()"
-              class="news__form">
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="selectedNews?.id ? 'Редактирование новости' : 'Создание новости'"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="selectedNews?.id ? editNews() : createNews()"
+  [nzOkDisabled]="newsForm.invalid"
+  nzCancelText="Отмена"
+  nzOkText="Сохранить"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="newsForm"
+      (ngSubmit)="createNews()"
+      class="news__form"
+    >
+      <label for="title" class="news__form-label"> Название </label>
+      <input
+        nz-input
+        id="title"
+        class="news__form-label"
+        formControlName="title"
+      />
 
-            <label for="title"
-                   class="news__form-label">
-                Название
-            </label>
-            <input nz-input
-                   id="title"
-                   class="news__form-label"
-                   formControlName="title" />
+      <label for="description"> Описание </label>
+      <nz-textarea-count [nzMaxCharacterCount]="100">
+        <textarea
+          id="description"
+          rows="4"
+          nz-input
+          formControlName="description"
+        >
+        </textarea>
+      </nz-textarea-count>
 
-            <label for="description">
-                Описание
-            </label>
-            <nz-textarea-count [nzMaxCharacterCount]="100">
-                <textarea id="description"
-                          rows="4"
-                          nz-input
-                          formControlName="description">
-                </textarea>
-            </nz-textarea-count>
-
-            <div class="clearfix">
-                Фото новости
-                <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                           nzListType="picture-card"
-                           [(nzFileList)]="fileList"
-                           [nzShowButton]="fileList.length < 8"
-                           [nzPreview]="handlePreview">
-                    <div>
-                        <i nz-icon
-                           nzType="plus"></i>
-                        <div style="margin-top: 8px">Upload</div>
-                    </div>
-                </nz-upload>
-                <nz-modal [nzVisible]="previewVisible"
-                          [nzContent]="modalContent"
-                          [nzFooter]="null"
-                          (nzOnCancel)="previewVisible = false">
-                    <ng-template #modalContent>
-                        <img [src]="previewImage"
-                             [ngStyle]="{ width: '100%' }" />
-                    </ng-template>
-                </nz-modal>
-            </div>
-        </form>
-    </ng-container>
+      <div class="clearfix">
+        Фото новости
+        <nz-upload
+          nzListType="picture-card"
+          [(nzFileList)]="fileList"
+          [nzShowButton]="fileList.length < 1"
+          [nzPreview]="handlePreview"
+          [nzBeforeUpload]="beforeUpload"
+        >
+          <!-- [nzAccept]  -->
+          <!-- [nzMultiple]="true" -->
+          <div>
+            <i nz-icon nzType="plus"></i>
+            <div style="margin-top: 8px">Upload</div>
+          </div>
+        </nz-upload>
+        <nz-modal
+          [nzVisible]="previewVisible"
+          [nzContent]="modalContent"
+          [nzFooter]="null"
+          (nzOnCancel)="previewVisible = false"
+        >
+          <ng-template #modalContent>
+            <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+          </ng-template>
+        </nz-modal>
+      </div>
+    </form>
+  </ng-container>
 </nz-modal>
 
-<nz-modal [(nzVisible)]="isDeleteModalVisible"
-          nzTitle="Подтвердите удаление новости"
-          (nzOnCancel)="handleCancel()"
-          (nzOnOk)="confirmDelete()"
-          [nzOkLoading]="isLoading"
-          nzCancelText="Нет"
-          nzOkText="Да">
-    <ng-container *nzModalContent>
-        Вы действительно хотите удалить новость {{selectedNews.title}}?
-    </ng-container>
+<nz-modal
+  [(nzVisible)]="isDeleteModalVisible"
+  nzTitle="Подтвердите удаление новости"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="confirmDelete()"
+  [nzOkLoading]="isLoading"
+  nzCancelText="Нет"
+  nzOkText="Да"
+>
+  <ng-container *nzModalContent>
+    Вы действительно хотите удалить новость {{ selectedNews.title }}?
+  </ng-container>
 </nz-modal>

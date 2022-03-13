@@ -23,8 +23,14 @@ export class News extends Model {
   @ApiProperty({ example: 'text', description: 'Описание' })
   @Column({
     type: DataType.STRING,
-    unique: true,
-    allowNull: false,
+    allowNull: true,
   })
   description: string;
+
+  @ApiProperty({ example: 'text', description: 'Описание' })
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  main_image_url: string;
 }
