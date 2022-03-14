@@ -44,22 +44,13 @@
                 </ul>
             </li>
             <li nz-submenu
-                nzTitle="Блокировка"
-                nzIcon="stop">
+                nzTitle="Пользователи"
+                nzIcon="user">
                 <ul>
                     <li nz-menu-item
-                        nzMatchRouter>
-                        <a>Пользователей</a>
-                    </li>
-                </ul>
-            </li>
-            <li nz-submenu
-                nzTitle="Назначение прав"
-                nzIcon="edit">
-                <ul>
-                    <li nz-menu-item
-                        nzMatchRouter>
-                        <a>Пользователи</a>
+                        nzMatchRouter
+                        [routerLink]="['users']">
+                        <a>Назначение прав и блокировка</a>
                     </li>
                 </ul>
             </li>
