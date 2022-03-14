@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 interface Person {
   key: string;
   name: string;
   age: number;
   address: string;
-  blocked: { from: Date | null | string; to: Date | null | string } | null;
+  blocked: [Date | null | string, Date | null | string] | null;
   roles: string[];
 }
 
@@ -21,11 +22,11 @@ export class UsersComponent implements OnInit {
       name: 'John Brown',
       age: 32,
       address: 'New York No. 1 Lake Park',
-      blocked: {
-        from: 'Tue Mar 08 2022 17:30:38 GMT+0300 (Moscow Standard Time)',
-        to: 'Tue Mar 08 2022 17:30:38 GMT+0300 (Moscow Standard Time)',
-      },
-      roles: ['User'],
+      blocked: [
+        'Tue Mar 08 2022 17:30:38 GMT+0300 (Moscow Standard Time)',
+        'Tue Mar 08 2022 17:30:38 GMT+0300 (Moscow Standard Time)',
+      ],
+      roles: ['user'],
     },
     {
       key: '2',
@@ -33,7 +34,7 @@ export class UsersComponent implements OnInit {
       age: 42,
       address: 'London No. 1 Lake Park',
       blocked: null,
-      roles: ['User, Moderator'],
+      roles: ['user', 'moderator'],
     },
     {
       key: '3',
@@ -41,66 +42,63 @@ export class UsersComponent implements OnInit {
       age: 32,
       address: 'Sidney No. 1 Lake Park',
       blocked: null,
-      roles: ['User, Admin'],
+      roles: ['user', 'admin'],
     },
   ];
   isChangeRoleModalVisible = false;
   isBlockModalVisible = false;
   selectedUser: any;
 
-  checkRoles = [
-    { label: 'Пользователь', value: 'User', checked: false },
-    { label: 'Модератор', value: 'Moderator', checked: false },
-    { label: 'Администратор', value: 'Admin', checked: false },
-  ];
+  blockDates = null;
 
-  date = null;
+  rolesForm: FormGroup;
 
-  constructor() {}
+  constructor(private fb: FormBuilder) {
+    this.rolesForm = this.fb.group({
+      user: false,
+      moderator: false,
+      admin: false,
+    });
+  }
 
   ngOnInit(): void {}
-
-  log(value: object[]): void {
-    console.log(value);
-  }
 
   showChangeRoleModal(data: any): void {
     this.isChangeRoleModalVisible = true;
     this.selectedUser = data;
 
-    this.selectedUser.roles.forEach((role: any) => {
-      this.checkRoles.forEach((checkboxRole: any, i: number) => {
-        if (checkboxRole.value === role) {
-          checkboxRole[i].checked = true;
-        }
-      });
-    });
+    if (this.selectedUser.roles.includes('user')) {
+      this.rolesForm.get('user')?.patchValue(true);
+    }
+    if (this.selectedUser.roles.includes('admin')) {
+      this.rolesForm.get('admin')?.patchValue(true);
+    }
+    if (this.selectedUser.roles.includes('moderator')) {
+      this.rolesForm.get('moderator')?.patchValue(true);
+    }
   }
 
   showBlockModal(data: any): void {
     this.isBlockModalVisible = true;
     this.selectedUser = data;
+    this.blockDates = this.selectedUser.blocked;
   }
 
   handleOk(): void {
-    console.log('Button ok clicked!');
     this.isChangeRoleModalVisible = false;
     this.isBlockModalVisible = false;
     this.selectedUser = null;
+    this.rolesForm.reset();
   }
 
   handleCancel(): void {
-    console.log('Button cancel clicked!');
     this.isChangeRoleModalVisible = false;
     this.isBlockModalVisible = false;
     this.selectedUser = null;
+    this.rolesForm.reset();
   }
 
   onChange(result: Date[]): void {
     console.log('onChange: ', result);
-  }
-
-  getWeek(result: Date[]): void {
-    // console.log('week: ', result.map(getISOWeek));
   }
 }

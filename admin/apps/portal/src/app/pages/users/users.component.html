@@ -19,7 +19,7 @@
             <td>
                 <a (click)="showChangeRoleModal(data)"
                    style="margin-right: 10px;">Изменить права</a>
-                <a (click)="showBlockModal(data)">{{ data.blocked?.from ? 'Разблокировать' :
+                <a (click)="showBlockModal(data)">{{ data?.blocked ? 'Разблокировать' :
                     'Заблокировать'}}</a>
             </td>
         </tr>
@@ -31,20 +31,39 @@
           (nzOnCancel)="handleCancel()"
           (nzOnOk)="handleOk()">
     <ng-container *nzModalContent>
-        <nz-checkbox-group [(ngModel)]="checkRoles"
-                           (ngModelChange)="log(checkRoles)">
-        </nz-checkbox-group>
+        <form [formGroup]="rolesForm">
+            <label nz-checkbox
+                   nzValue="true"
+                   formControlName="user">
+                Пользователь
+            </label>
+            <label nz-checkbox
+                   nzValue="true"
+                   formControlName="moderator">
+                Модератор
+            </label>
+            <label nz-checkbox
+                   nzValue="true"
+                   formControlName="admin">
+                Администратор
+            </label>
+        </form>
     </ng-container>
 </nz-modal>
 
 <nz-modal [(nzVisible)]="isBlockModalVisible"
-          [nzTitle]="selectedUser?.blocked?.from ? 'Разблокировка' : 'Блокировка'"
+          [nzTitle]="selectedUser?.blocked ? 'Разблокировка' : 'Блокировка'"
           (nzOnCancel)="handleCancel()"
+          [nzCancelText]="'Разблокировать'"
+          [nzOkText]="'Блокировать'"
+          [nzCancelDisabled]="!selectedUser?.blocked"
           (nzOnOk)="handleOk()">
     <ng-container *nzModalContent>
         Даты начала и окончания блокировки
-        <nz-range-picker [nzShowTime]="true"
-                         [(ngModel)]="date"
+        <nz-range-picker [nzAutoFocus]="true"
+                         [nzDefaultPickerValue]="selectedUser?.blocked"
+                         [nzShowTime]="true"
+                         [(ngModel)]="blockDates"
                          (ngModelChange)="onChange($event)">
         </nz-range-picker>
     </ng-container>
